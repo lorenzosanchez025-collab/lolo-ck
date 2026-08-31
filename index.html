@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compu King | Registro y turnos</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#10213d; --electric:#1379e8; --aqua:#23d5c4; --paper:#f7fbff; --night:#07152b; --muted:#48617f; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { width:100%; margin:0; font-family:"Raleway",sans-serif; color:var(--ink); }
+    .app-shell { width:100%; overflow:hidden; }
+    .tech-grid { background-image:linear-gradient(rgba(35,213,196,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(35,213,196,.07) 1px,transparent 1px); background-size:42px 42px; }
+    .mono-label { font-family:"Space Mono",monospace; letter-spacing:.12em; text-transform:uppercase; }
+    .topbar { border-bottom:1px solid rgba(35,213,196,.2); backdrop-filter:blur(14px); }
+    .brand-mark { box-shadow:0 10px 24px rgba(19,121,232,.28); }
+    .brand-mark img { width:100%; height:100%; object-fit:contain; image-rendering:auto; }
+    .brand-lockup { padding:.35rem; }
+    .hero-section { min-height:470px; position:relative; overflow:hidden; }
+    .hero-image-wrap { position:absolute; inset:0; }
+    .hero-image-wrap::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(7,21,43,.98),rgba(7,21,43,.87) 44%,rgba(7,21,43,.32)); }
+    .hero-image { width:100%; height:100%; object-fit:cover; filter:saturate(1.14) contrast(1.06); }
+    .service-card { overflow:hidden; border:1px solid rgba(19,121,232,.13); box-shadow:0 16px 40px rgba(16,33,61,.08); transition:transform .28s ease,box-shadow .28s ease; }
+    .service-card:hover { transform:translateY(-6px); box-shadow:0 24px 50px rgba(16,33,61,.15); }
+    .service-image { width:100%; height:180px; object-fit:cover; display:block; }
+    .booking-shell { box-shadow:0 24px 60px rgba(16,33,61,.12); }
+    .form-control { width:100%; border:1px solid #c8d9ed; border-radius:12px; padding:.8rem .9rem; background:#fff; color:var(--ink); outline:none; transition:border-color .2s,box-shadow .2s; }
+    .form-control:focus { border-color:var(--electric); box-shadow:0 0 0 3px rgba(19,121,232,.15); }
+    .form-control.invalid { border-color:#dc2626; }
+    .form-message { min-height:1.35rem; }
+    .summary-row { display:flex; justify-content:space-between; gap:1rem; padding:.75rem 0; border-bottom:1px solid rgba(200,217,237,.7); }
+    .summary-row:last-child { border-bottom:0; }
+    .contact-panel { overflow:hidden; box-shadow:0 20px 45px rgba(7,21,43,.24); }
+    .contact-panel::before { content:""; position:absolute; width:260px; height:260px; border:1px solid rgba(35,213,196,.25); border-radius:50%; top:-140px; right:-65px; }
+    .reveal { animation:rise .7s cubic-bezier(.2,.7,.2,1) both; }
+    .delay-1 { animation-delay:.1s; } .delay-2 { animation-delay:.2s; }
+    @keyframes rise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid var(--aqua); outline-offset:3px; }
+    @media (max-width:640px) {
+      .hero-section { min-height:520px; }
+      .hero-image-wrap::after { background:linear-gradient(180deg,rgba(7,21,43,.72),rgba(7,21,43,.97) 78%); }
+    }
+  </style>
+ </head>
+ <body data-template-id="__page-root" style="background: rgb(247, 251, 255);">
+  <div class="app-shell">
+   <header class="topbar sticky top-0 z-30 bg-[#f7fbff]/95">
+    <nav class="w-full max-w-7xl mx-auto px-5 sm:px-8 py-3 flex items-center justify-between" aria-label="Navegación principal">
+     <div class="flex items-center gap-3">
+      <div class="brand-mark brand-lockup w-20 h-20 rounded-2xl overflow-hidden bg-[#07152b] flex items-center justify-center p-1">
+        <img data-template-id="brand-logo" class="canva-image object-contain w-full h-full" loading="lazy" src="./logo.png" alt="Logo de Compu King">
+      </div>
+      <div>
+       <p data-template-id="brand-name" class="canva-text m-0 font-black leading-none" style="color: rgb(16, 33, 61); font-weight: 900; font-style: normal; font-size: 18px; letter-spacing: -0.04rem;">Compu King</p>
+       <p data-template-id="brand-subtitle" class="canva-text mono-label m-0 mt-1 text-[9px]" style="color: rgb(72, 97, 127); font-weight: 700; font-style: normal; font-size: 9px; letter-spacing: 0.12rem;">Tecnología que rinde</p>
+      </div>
+     </div><a data-template-id="nav-booking-link" class="canva-link mono-label text-xs font-bold no-underline" href="#turnos" style="color: rgb(19, 121, 232); font-weight: 700; font-style: normal; font-size: 12px; letter-spacing: 0.08rem;">Agendar turno</a>
+    </nav>
+   </header>
+   <main>
+    <section data-template-id="hero-section" class="canva-banner hero-section tech-grid" aria-labelledby="hero-title" style="background: rgb(7, 21, 43);">
+     <div class="hero-image-wrap">
+      <img data-template-id="hero-image" class="canva-image hero-image" loading="lazy" src="https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1920" alt="Colorful flat lay of gaming gear including headset, controller, and keyboard under vibrant lighting.">
+     </div>
+     <div class="relative z-10 w-full flex items-center">
+      <div class="w-full max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+       <p data-template-id="hero-eyebrow" class="canva-text reveal mono-label inline-flex rounded-full px-4 py-2 text-xs font-bold" style="background: rgb(35, 213, 196); color: rgb(7, 21, 43); font-weight: 700; font-style: normal; font-size: 12px; letter-spacing: 0.08rem;">Gaming · Computación · Soporte</p>
+       <h1 data-template-id="hero-title" class="canva-text reveal delay-1 max-w-3xl mt-6 mb-0 font-black leading-[.98]" style="color: rgb(255, 255, 255); font-weight: 900; font-style: normal; font-size: 32px; letter-spacing: -0.05rem; line-height: 0.98;">Tecnología pensada para potenciar lo que hacés.</h1>
+       <p data-template-id="hero-description" class="canva-text reveal delay-2 mt-6 mb-0 max-w-2xl text-base sm:text-lg leading-relaxed" style="color: rgb(217, 236, 255); font-weight: 400; font-style: normal; font-size: 18px; line-height: 1.55;">Registrate, contanos qué necesitás y solicitá un turno para encontrar la solución tecnológica ideal.</p><a data-template-id="hero-cta" class="canva-button inline-flex items-center gap-3 mt-8 rounded-xl px-5 py-3 no-underline font-bold hover:-translate-y-0.5 transition-transform" href="#turnos" style="background: rgb(19, 121, 232); color: rgb(255, 255, 255);"> <span data-template-id="hero-cta-text" class="canva-text" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 15px;">Registrarme y agendar</span><i data-lucide="calendar-days" aria-hidden="true"></i> </a>
+      </div>
+     </div>
+    </section>
+    <section class="tech-grid w-full py-16 sm:py-20" aria-labelledby="services-title">
+     <div class="w-full max-w-7xl mx-auto px-5 sm:px-8">
+      <p data-template-id="services-eyebrow" class="canva-text mono-label m-0 text-xs font-bold" style="color: rgb(19, 121, 232); font-weight: 700; font-style: normal; font-size: 12px; letter-spacing: 0.1rem;">Soluciones Compu King</p>
+      <h2 data-template-id="services-title" class="canva-text mt-3 mb-0 font-black leading-tight" style="color: rgb(16, 33, 61); font-weight: 900; font-style: normal; font-size: 24px; letter-spacing: -0.04rem;">Tecnología para cada necesidad.</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-9">
+       <article data-template-id="gaming-card" class="canva-card service-card rounded-2xl" style="background: rgb(255, 255, 255);"><img data-template-id="gaming-image" class="canva-image service-image" loading="lazy" src="https://images.pexels.com/photos/2115256/pexels-photo-2115256.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Gaming mouse and illuminated RGB keyboard">
+        <div class="p-6"><i data-lucide="gamepad-2" class="text-[#1379e8]" aria-hidden="true"></i>
+         <h3 data-template-id="gaming-title" class="canva-text mt-4 mb-0 font-extrabold" style="color: rgb(16, 33, 61); font-weight: 800; font-style: normal; font-size: 21px;">Productos para gamers</h3>
+         <p data-template-id="gaming-description" class="canva-text mt-3 mb-0 text-sm leading-relaxed" style="color: rgb(72, 97, 127); font-weight: 400; font-style: normal; font-size: 15px; line-height: 1.55;">Periféricos, accesorios y setups preparados para disfrutar cada partida con rendimiento y estilo.</p>
+        </div>
+       </article>
+       <article data-template-id="components-card" class="canva-card service-card rounded-2xl" style="background: rgb(255, 255, 255);"><img data-template-id="components-image" class="canva-image service-image" loading="lazy" src="https://images.pexels.com/photos/2582928/pexels-photo-2582928.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="HyperX Fury DDR4 RAM in a gaming PC build">
+        <div class="p-6"><i data-lucide="cpu" class="text-[#23bdaa]" aria-hidden="true"></i>
+         <h3 data-template-id="components-title" class="canva-text mt-4 mb-0 font-extrabold" style="color: rgb(16, 33, 61); font-weight: 800; font-style: normal; font-size: 21px;">PCs y componentes</h3>
+         <p data-template-id="components-description" class="canva-text mt-3 mb-0 text-sm leading-relaxed" style="color: rgb(72, 97, 127); font-weight: 400; font-style: normal; font-size: 15px; line-height: 1.55;">Armá, actualizá o repará tu computadora con componentes seleccionados para durar.</p>
+        </div>
+       </article>
+       <article data-template-id="advisory-card" class="canva-card service-card rounded-2xl" style="background: rgb(255, 255, 255);"><img data-template-id="advisory-image" class="canva-image service-image" loading="lazy" src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Office meeting">
+        <div class="p-6"><i data-lucide="messages-square" class="text-[#10213d]" aria-hidden="true"></i>
+         <h3 data-template-id="advisory-title" class="canva-text mt-4 mb-0 font-extrabold" style="color: rgb(16, 33, 61); font-weight: 800; font-style: normal; font-size: 21px;">Asesoramiento tecnológico</h3>
+         <p data-template-id="advisory-description" class="canva-text mt-3 mb-0 text-sm leading-relaxed" style="color: rgb(72, 97, 127); font-weight: 400; font-style: normal; font-size: 15px; line-height: 1.55;">Acompañamos a personas y empresas con recomendaciones claras y soluciones a medida.</p>
+        </div>
+       </article>
+      </div>
+     </div>
+    </section>
+    <section id="turnos" class="w-full px-5 sm:px-8 pb-16 sm:pb-24" aria-labelledby="booking-title">
+     <div data-template-id="booking-section" class="canva-section booking-shell w-full max-w-7xl mx-auto rounded-3xl p-6 sm:p-10" style="background: rgb(255, 255, 255);">
+      <div class="max-w-2xl">
+       <p data-template-id="booking-eyebrow" class="canva-text mono-label m-0 text-xs font-bold" style="color: rgb(19, 121, 232); font-weight: 700; font-style: normal; font-size: 12px; letter-spacing: 0.1rem;">Registro y agenda</p>
+       <h2 data-template-id="booking-title" class="canva-text mt-3 mb-0 font-black leading-tight" style="color: rgb(16, 33, 61); font-weight: 900; font-style: normal; font-size: 25px; letter-spacing: -0.04rem;">Reservá un espacio para tu próxima consulta.</h2>
+       <p data-template-id="booking-description" class="canva-text mt-4 mb-0 leading-relaxed" style="color: rgb(72, 97, 127); font-weight: 400; font-style: normal; font-size: 16px; line-height: 1.55;">Completá tu registro y solicitá un turno. Te contactaremos para gestionar tu consulta.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-9">
+       <section data-template-id="register-panel" class="canva-panel rounded-2xl p-6 sm:p-7" aria-labelledby="register-title" style="background: rgb(247, 251, 255);">
+        <div class="flex items-center gap-3"><span class="w-9 h-9 rounded-lg bg-[#1379e8] text-white grid place-items-center font-black">1</span>
+         <div>
+          <p data-template-id="register-kicker" class="canva-text mono-label m-0 text-[10px] font-bold" style="color: rgb(19, 121, 232); font-weight: 700; font-style: normal; font-size: 10px; letter-spacing: 0.08rem;">Paso 1</p>
+          <h3 data-template-id="register-title" class="canva-text m-0 font-black" style="color: rgb(16, 33, 61); font-weight: 900; font-style: normal; font-size: 20px;">Tus datos de contacto</h3>
+         </div>
+        </div>
+        <form id="registration-form" class="mt-6" novalidate="">
+         <div class="mb-4"><label data-template-id="full-name-label" class="canva-text block mb-2 text-sm font-bold" for="full-name" style="color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Nombre completo</label> <input id="full-name" data-template-id="full-name-input" class="canva-input form-control" type="text" autocomplete="name" required="" placeholder="Ej. Martina Rodríguez" style="font-weight: 400; font-style: normal; font-size: 16px;">
+         </div>
+         <div class="mb-4"><label data-template-id="email-label" class="canva-text block mb-2 text-sm font-bold" for="email" style="color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Correo electrónico</label> <input id="email" data-template-id="email-input" class="canva-input form-control" type="email" autocomplete="email" required="" placeholder="tuemail@ejemplo.com" style="font-weight: 400; font-style: normal; font-size: 16px;">
+         </div>
+         <div class="mb-4"><label data-template-id="phone-label" class="canva-text block mb-2 text-sm font-bold" for="phone" style="color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Teléfono</label> <input id="phone" data-template-id="phone-input" class="canva-input form-control" type="tel" autocomplete="tel" required="" placeholder="Ej. +54 9 11 1234 5678" style="font-weight: 400; font-style: normal; font-size: 16px;">
+         </div>
+         <p data-template-id="privacy-note" class="canva-text text-xs leading-relaxed" style="color: rgb(72, 97, 127); font-weight: 400; font-style: normal; font-size: 12px; line-height: 1.5;">Usaremos estos datos únicamente para gestionar tu registro y el turno solicitado.</p>
+         <p id="registration-message" class="form-message mt-3 text-sm font-semibold" aria-live="polite"></p><button id="register-button" data-template-id="register-button" class="canva-button w-full mt-2 rounded-xl px-5 py-3 font-bold transition-transform hover:-translate-y-0.5" type="submit" style="background: rgb(19, 121, 232); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">Registrarme</button>
+        </form>
+       </section>
+       <section data-template-id="appointment-panel" class="canva-panel rounded-2xl p-6 sm:p-7" aria-labelledby="appointment-title" style="background: rgb(247, 251, 255);">
+        <div class="flex items-center gap-3"><span class="w-9 h-9 rounded-lg bg-[#23d5c4] text-[#07152b] grid place-items-center font-black">2</span>
+         <div>
+          <p data-template-id="appointment-kicker" class="canva-text mono-label m-0 text-[10px] font-bold" style="color: rgb(12, 140, 128); font-weight: 700; font-style: normal; font-size: 10px; letter-spacing: 0.08rem;">Paso 2</p>
+          <h3 data-template-id="appointment-title" class="canva-text m-0 font-black" style="color: rgb(16, 33, 61); font-weight: 900; font-style: normal; font-size: 20px;">Agendá tu turno</h3>
+         </div>
+        </div>
+        <form id="appointment-form" class="mt-6" novalidate="">
+         <fieldset id="appointment-fields" disabled="">
+          <div class="mb-4"><label data-template-id="service-label" class="canva-text block mb-2 text-sm font-bold" for="service" style="color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Servicio que necesitás</label> <select id="service" class="form-control" required=""> <option value="">Elegí un servicio</option> <option value="Asesoramiento para empresas">Asesoramiento para empresas</option> <option value="Asesoramiento personal">Asesoramiento personal</option> <option value="Soporte técnico">Soporte técnico</option> <option value="Consulta sobre productos gamer o computación">Consulta sobre productos gamer o computación</option> </select>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+           <div><label data-template-id="date-label" class="canva-text block mb-2 text-sm font-bold" for="appointment-date" style="color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Fecha</label> <input id="appointment-date" class="form-control" type="date" required="">
+           </div>
+           <div><label data-template-id="time-label" class="canva-text block mb-2 text-sm font-bold" for="time-slot" style="color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Horario disponible</label> <select id="time-slot" class="form-control" required=""> <option value="">Horario</option> <option value="10:00">10:00</option> <option value="12:00">12:00</option> <option value="15:00">15:00</option> <option value="17:00">17:00</option> </select>
+           </div>
+          </div>
+          <div class="mt-4"><label data-template-id="notes-label" class="canva-text block mb-2 text-sm font-bold" for="notes" style="color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Contanos brevemente tu consulta (opcional)</label> <textarea id="notes" data-template-id="notes-input" class="canva-input form-control resize-y" rows="3" style="font-weight: 400; font-style: normal; font-size: 16px;">Ej. Necesito ayuda para actualizar mi PC.</textarea>
+          </div>
+         </fieldset>
+         <p id="appointment-help" data-template-id="appointment-help" class="canva-text mt-4 text-sm font-semibold" style="color: rgb(72, 97, 127); font-weight: 400; font-style: normal; font-size: 14px;">Completá primero el registro para habilitar la agenda.</p>
+         <p id="appointment-message" class="form-message mt-3 text-sm font-semibold" aria-live="polite"></p><button id="review-button" data-template-id="review-button" class="canva-button w-full mt-2 rounded-xl px-5 py-3 font-bold transition-transform hover:-translate-y-0.5" type="submit" disabled="" style="background: rgb(16, 33, 61); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">Ver resumen de la reserva</button>
+        </form>
+        <div id="booking-summary" class="hidden mt-6 rounded-xl border border-[#b9d9f8] bg-[#f0f8ff] p-5" aria-live="polite">
+         <h4 data-template-id="summary-title" class="canva-text m-0 font-black" style="color: rgb(16, 33, 61); font-weight: 900; font-style: normal; font-size: 18px;">Revisá tu solicitud</h4>
+         <div class="mt-3 text-sm">
+          <div class="summary-row">
+           <span>Servicio</span><strong id="summary-service"></strong>
+          </div>
+          <div class="summary-row">
+           <span>Fecha</span><strong id="summary-date"></strong>
+          </div>
+          <div class="summary-row">
+           <span>Horario</span><strong id="summary-time"></strong>
+          </div>
+          <div class="summary-row">
+           <span>Consulta</span><strong id="summary-notes" class="text-right"></strong>
+          </div>
+         </div>
+         <div class="flex flex-col sm:flex-row gap-3 mt-5"><button id="edit-booking-button" data-template-id="edit-booking-button" class="canva-button flex-1 rounded-xl px-4 py-3 font-bold" type="button" style="background: rgb(219, 234, 254); color: rgb(16, 33, 61); font-weight: 700; font-style: normal; font-size: 14px;">Volver a editar</button> <button id="cancel-booking-button" data-template-id="cancel-booking-button" class="canva-button flex-1 rounded-xl px-4 py-3 font-bold" type="button" style="background: rgb(238, 242, 247); color: rgb(72, 97, 127); font-weight: 700; font-style: normal; font-size: 14px;">Cancelar</button> <button id="confirm-booking-button" data-template-id="confirm-booking-button" class="canva-button flex-1 rounded-xl px-4 py-3 font-bold" type="button" style="background: rgb(35, 213, 196); color: rgb(7, 21, 43); font-weight: 800; font-style: normal; font-size: 14px;">Agendar turno</button>
+         </div>
+        </div>
+        <div id="booking-success" class="hidden mt-6 rounded-xl border border-[#81e5d9] bg-[#e9fffb] p-5">
+         <div class="flex gap-3"><i data-lucide="circle-check-big" class="text-[#0c8c80] shrink-0" aria-hidden="true"></i>
+          <div>
+           <h4 data-template-id="success-title" class="canva-text m-0 font-black" style="color: rgb(11, 93, 86); font-weight: 900; font-style: normal; font-size: 18px;">¡Turno solicitado!</h4>
+           <p data-template-id="success-description" class="canva-text mt-2 mb-0 text-sm leading-relaxed" style="color: rgb(36, 93, 89); font-weight: 400; font-style: normal; font-size: 14px; line-height: 1.5;">Recibimos tu solicitud. El equipo de Compu King se contactará con vos para confirmar el turno.</p>
+          </div>
+         </div>
+        </div>
+       </section>
+      </div>
+     </div>
+    </section>
+    <section id="contacto" class="w-full px-5 sm:px-8 pb-16">
+     <div data-template-id="contact-panel" class="canva-panel contact-panel relative w-full max-w-7xl mx-auto rounded-3xl px-6 py-11 sm:p-14 text-center" style="background: rgb(7, 21, 43);">
+      <div class="relative z-10 max-w-2xl mx-auto">
+       <p data-template-id="contact-eyebrow" class="canva-text mono-label m-0 text-xs font-bold" style="color: rgb(35, 213, 196); font-weight: 700; font-style: normal; font-size: 12px; letter-spacing: 0.1rem;">Seguinos de cerca</p>
+       <h2 data-template-id="contact-title" class="canva-text mt-4 mb-0 font-black leading-tight" style="color: rgb(255, 255, 255); font-weight: 900; font-style: normal; font-size: 24px; letter-spacing: -0.04rem;">Tecnología, novedades y soluciones.</h2>
+       <p data-template-id="contact-description" class="canva-text mt-4 mb-0 leading-relaxed" style="color: rgb(200, 217, 237); font-weight: 400; font-style: normal; font-size: 16px; line-height: 1.55;">Encontrá productos, consejos y todas las novedades de Compu King en Instagram.</p><a data-template-id="instagram-link" class="canva-button inline-flex items-center gap-3 mt-7 rounded-xl px-6 py-4 no-underline font-extrabold hover:-translate-y-0.5 transition-transform" href="https://www.instagram.com/compuking" target="_blank" rel="noopener noreferrer" style="background: rgb(35, 213, 196); color: rgb(7, 21, 43);"> <i data-lucide="instagram" aria-hidden="true"></i><span data-template-id="instagram-text" class="canva-text" style="color: rgb(7, 21, 43); font-weight: 800; font-style: normal; font-size: 16px;">Instagram: @compuking</span> </a>
+      </div>
+     </div>
+    </section>
+   </main>
+   <footer class="w-full border-t border-[#1379e8]/10 py-6 text-center">
+    <p data-template-id="footer-text" class="canva-text mono-label m-0 text-[10px]" style="color: rgb(72, 97, 127); font-weight: 700; font-style: normal; font-size: 10px; letter-spacing: 0.1rem;">COMPU KING · TECNOLOGÍA QUE RINDE</p>
+   </footer>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) lucide.createIcons();
+
+      const registrationForm = document.getElementById("registration-form");
+      const appointmentForm = document.getElementById("appointment-form");
+      const appointmentFields = document.getElementById("appointment-fields");
+      const registerButton = document.getElementById("register-button");
+      const reviewButton = document.getElementById("review-button");
+      const registrationMessage = document.getElementById("registration-message");
+      const appointmentMessage = document.getElementById("appointment-message");
+      const appointmentHelp = document.getElementById("appointment-help");
+      const summary = document.getElementById("booking-summary");
+      const success = document.getElementById("booking-success");
+      const confirmButton = document.getElementById("confirm-booking-button");
+
+      let client = null;
+      const USERS_KEY = "compuKing_users";
+      const APPOINTMENTS_KEY = "compuKing_appointments";
+
+      const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+      const getAppointments = () => JSON.parse(localStorage.getItem(APPOINTMENTS_KEY) || "[]");
+      const saveUsers = users => localStorage.setItem(USERS_KEY, JSON.stringify(users));
+      const saveAppointments = appointments =>
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
+
+      function setMessage(element, message, color) {
+        element.textContent = message;
+        element.className = "form-message mt-3 text-sm font-semibold " + color;
+      }
+
+      function resetInvalid(form) {
+        form.querySelectorAll(".invalid").forEach(field => field.classList.remove("invalid"));
+      }
+
+      function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      }
+
+      // No permite elegir fechas anteriores a hoy.
+      const dateInput = document.getElementById("appointment-date");
+      const now = new Date();
+      const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString().split("T")[0];
+      dateInput.min = localToday;
+
+      // Registro del usuario.
+      registrationForm.addEventListener("submit", event => {
+        event.preventDefault();
+        resetInvalid(registrationForm);
+
+        const fullName = document.getElementById("full-name");
+        const email = document.getElementById("email");
+        const phone = document.getElementById("phone");
+
+        const nameValue = fullName.value.trim();
+        const emailValue = email.value.trim().toLowerCase();
+        const phoneValue = phone.value.trim();
+
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+        const phoneOk = phoneValue.replace(/[^\d]/g, "").length >= 7;
+
+        if (!nameValue || !emailOk || !phoneOk) {
+          if (!nameValue) fullName.classList.add("invalid");
+          if (!emailOk) email.classList.add("invalid");
+          if (!phoneOk) phone.classList.add("invalid");
+          setMessage(
+            registrationMessage,
+            "Revisá nombre, correo y teléfono antes de continuar.",
+            "text-red-600"
+          );
+          return;
+        }
+
+        const users = getUsers();
+        let user = users.find(u => u.email === emailValue);
+
+        if (!user) {
+          user = {
+            id: generateId(),
+            full_name: nameValue,
+            email: emailValue,
+            phone: phoneValue,
+            created_at: new Date().toISOString()
+          };
+          users.push(user);
+          saveUsers(users);
+        } else {
+          user.full_name = nameValue;
+          user.phone = phoneValue;
+          saveUsers(users);
+        }
+
+        client = user;
+        appointmentFields.disabled = false;
+        reviewButton.disabled = false;
+        appointmentHelp.textContent = "¡Registro listo! Ahora elegí el servicio y el horario.";
+        appointmentHelp.className = "canva-text mt-4 text-sm font-semibold text-[#0c8c80]";
+        setMessage(
+          registrationMessage,
+          "¡Registro completado! Ya podés agendar tu turno.",
+          "text-[#0c8c80]"
+        );
+      });
+
+      // Revisa si un horario ya está ocupado.
+      function isSlotTaken(date, time) {
+        return getAppointments().some(
+          appointment => appointment.date === date &&
+                         appointment.time_slot === time &&
+                         appointment.status !== "Cancelado"
+        );
+      }
+
+      // Deshabilita horarios ocupados cuando se cambia la fecha.
+      function updateTimeSlots() {
+        const timeSelect = document.getElementById("time-slot");
+        const selectedDate = dateInput.value;
+
+        [...timeSelect.options].forEach(option => {
+          if (!option.value) return;
+          const taken = selectedDate && isSlotTaken(selectedDate, option.value);
+          option.disabled = Boolean(taken);
+          option.textContent = taken ? option.value + " — ocupado" : option.value;
+        });
+
+        if (timeSelect.selectedOptions[0]?.disabled) {
+          timeSelect.value = "";
+        }
+      }
+
+      dateInput.addEventListener("change", updateTimeSlots);
+
+      // Revisión del turno antes de guardarlo.
+      appointmentForm.addEventListener("submit", event => {
+        event.preventDefault();
+        resetInvalid(appointmentForm);
+
+        const service = document.getElementById("service");
+        const date = document.getElementById("appointment-date");
+        const time = document.getElementById("time-slot");
+        const notes = document.getElementById("notes");
+
+        if (!client) {
+          setMessage(appointmentMessage, "Primero completá tu registro.", "text-red-600");
+          return;
+        }
+
+        if (!service.value || !date.value || !time.value) {
+          [service, date, time].forEach(field =>
+            field.classList.toggle("invalid", !field.value)
+          );
+          setMessage(
+            appointmentMessage,
+            "Completá servicio, fecha y horario para revisar tu turno.",
+            "text-red-600"
+          );
+          return;
+        }
+
+        if (date.value < localToday) {
+          date.classList.add("invalid");
+          setMessage(appointmentMessage, "No podés seleccionar una fecha pasada.", "text-red-600");
+          return;
+        }
+
+        if (isSlotTaken(date.value, time.value)) {
+          time.classList.add("invalid");
+          updateTimeSlots();
+          setMessage(
+            appointmentMessage,
+            "Ese horario ya fue ocupado. Elegí otro.",
+            "text-red-600"
+          );
+          return;
+        }
+
+        document.getElementById("summary-service").textContent = service.value;
+        document.getElementById("summary-date").textContent =
+          new Date(date.value + "T12:00:00").toLocaleDateString("es-AR", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          });
+        document.getElementById("summary-time").textContent = time.value + " hs";
+        document.getElementById("summary-notes").textContent =
+          notes.value.trim() || "Sin detalle adicional";
+
+        summary.classList.remove("hidden");
+        success.classList.add("hidden");
+        appointmentForm.classList.add("hidden");
+        summary.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+
+      document.getElementById("edit-booking-button").addEventListener("click", () => {
+        summary.classList.add("hidden");
+        appointmentForm.classList.remove("hidden");
+      });
+
+      document.getElementById("cancel-booking-button").addEventListener("click", () => {
+        summary.classList.add("hidden");
+        appointmentForm.classList.remove("hidden");
+        appointmentForm.reset();
+        updateTimeSlots();
+        setMessage(
+          appointmentMessage,
+          "La solicitud fue cancelada. Podés elegir otro turno.",
+          "text-[#48617f]"
+        );
+      });
+
+      // Guarda definitivamente el turno.
+      confirmButton.addEventListener("click", () => {
+        if (!client) return;
+
+        const service = document.getElementById("service");
+        const date = document.getElementById("appointment-date");
+        const time = document.getElementById("time-slot");
+        const notes = document.getElementById("notes");
+
+        // Segunda comprobación para evitar duplicados.
+        if (isSlotTaken(date.value, time.value)) {
+          summary.classList.add("hidden");
+          appointmentForm.classList.remove("hidden");
+          updateTimeSlots();
+          setMessage(
+            appointmentMessage,
+            "Ese horario acaba de ser ocupado. Elegí otro.",
+            "text-red-600"
+          );
+          return;
+        }
+
+        confirmButton.disabled = true;
+        confirmButton.style.opacity = ".65";
+
+        const appointments = getAppointments();
+        appointments.push({
+          id: generateId(),
+          user_id: client.id,
+          full_name: client.full_name,
+          email: client.email,
+          phone: client.phone,
+          service: service.value,
+          date: date.value,
+          time_slot: time.value,
+          notes: notes.value.trim(),
+          status: "Pendiente",
+          created_at: new Date().toISOString()
+        });
+
+        saveAppointments(appointments);
+
+        confirmButton.disabled = false;
+        confirmButton.style.opacity = "1";
+
+        summary.classList.add("hidden");
+        appointmentForm.classList.add("hidden");
+        success.classList.remove("hidden");
+
+        registrationForm.reset();
+        appointmentForm.reset();
+        appointmentFields.disabled = true;
+        reviewButton.disabled = true;
+        client = null;
+        setMessage(registrationMessage, "", "text-black");
+        appointmentHelp.textContent = "Completá primero el registro para habilitar la agenda.";
+        appointmentHelp.className = "canva-text mt-4 text-sm font-semibold text-[#48617f]";
+        updateTimeSlots();
+      });
+
+      updateTimeSlots();
+    });
+  </script>
+</body>
+</html>
